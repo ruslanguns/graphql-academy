@@ -1,11 +1,28 @@
 
 import { IResolvers } from 'graphql-tools';
+import { database } from '../data/data.store';
 
 const query: IResolvers = {
     Query: {
-        estudiantes(): string {
-            return 'lista de estudiantes';
-        }
+        estudiantes(): any {
+            return database.estudiantes;
+        },
+        estudiante(__: void, { id }): any {
+            const resultado = database.estudiantes.filter(estudiante => estudiante.id === id)[0];
+            if (!resultado) {
+                return {
+                    id: '-1',
+                    name: `No se ha encontrado el estudiante con el ID ${id}`,
+                    email: '',
+                    courses: []
+                };
+            } else {
+                return resultado;
+            }
+        },
+        cursos(): any {
+            return database.cursos;
+        },
     }
 }
 
