@@ -19,8 +19,26 @@ const mutation: IResolvers = {
                 reviews: [],
             }
 
-            database.cursos.push(itemCurso);
-            return itemCurso;
+            // Evitamos que no se incluya curso con el mismo título
+            const tituloDisponible = database.cursos.filter(item => item.title === itemCurso.title).length === 0;
+            if (tituloDisponible) {
+                database.cursos.push(itemCurso);
+                return itemCurso;
+            } else {
+                return {
+                    id: -1,
+                    title: `El curso ya existe con este titulo`,
+                    description: '',
+                    clases: '-1',
+                    time: '0.0',
+                    level: 'TODOS',
+                    logo: '',
+                    path: '',
+                    teacher: '',
+                    reviews: [],
+                }
+            }
+
         }
     }
 }
