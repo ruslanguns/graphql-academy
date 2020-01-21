@@ -39,6 +39,51 @@ const mutation: IResolvers = {
                 }
             }
 
+        },
+        modificarCurso(__: void, { curso }): any {
+            const existe = _.findIndex(database.cursos, (o) => o.id === curso.id);
+
+            if (existe > -1) {
+                const valoraciones = database.cursos[existe].reviews;
+                curso.reviews = valoraciones;
+                database.cursos[existe] = curso;
+                return curso;
+            }
+            return {
+                id: -1,
+                title: `El curso no existe en la DB`,
+                description: '',
+                clases: '-1',
+                time: '0.0',
+                level: 'TODOS',
+                logo: '',
+                path: '',
+                teacher: '',
+                reviews: [],
+            }
+
+        },
+        eliminarCurso(__: void, { id }): any {
+            const borrar = _.remove(database.cursos, (o) => o.id === id);
+
+            console.log(borrar);
+
+            if (!borrar.length) {
+                return {
+                    id: -1,
+                    title: `No existe ningún curso con ese ID`,
+                    description: '',
+                    clases: '-1',
+                    time: '0.0',
+                    level: 'TODOS',
+                    logo: '',
+                    path: '',
+                    teacher: '',
+                    reviews: [],
+                }
+            }
+
+            return borrar[0];
         }
     }
 }
